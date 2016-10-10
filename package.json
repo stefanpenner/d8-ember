@@ -1,0 +1,15 @@
+{
+  "name": "ember-d8",
+  "version": "1.0.0",
+  "description": "",
+  "main": "d8-index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "loader.js": "^4.0.11",
+    "simple-dom": "^0.3.0"
+  }
+}

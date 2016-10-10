@@ -1,0 +1,10 @@
+--trace-opt-verbose
+time --prof + tick-processor
+--trace-inlining
+--trace-gc
+--allow-natives
+--help
+
+%HaveSameMap + --allow-natives-syntax
+
+enableProfiler() / disableProfiler()
