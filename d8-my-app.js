@@ -23,8 +23,7 @@ const document = new SimpleDOMTests.Document();
 document.createElementNS = document.createElement; // TODO:wat
 global.document = document;
 SimpleDOMTests.Node.prototype.insertAdjacentHTML = function( ) {};
-SimpleDOMTests.Node.prototype.appendChild = function(x) { return x;};
-SimpleDOMTests.Node.prototype.cloneNode = function(x) { return x;};
+
 global.module = {
   require(x) {
     if (x === 'url') {
@@ -47,7 +46,6 @@ loadFile('./vendor/ember-load-initializers.js'); // TODO: use fastboot vendor
 loadFile('./vendor/ember-resolver.js'); // TODO: use fastboot vendor
 runningTests = true;
 loadFile('./my-app/dist/assets/my-app.js');
-
 
 const App = require('my-app/app').default;
 const app = App.create({
