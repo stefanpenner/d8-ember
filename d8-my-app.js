@@ -23,18 +23,9 @@ loadFile('./node_modules/simple-dom/dist/simple-dom.js');
 const doc = new SimpleDOM.Document();
 const self = {};
 const window = {};
-// document.createElementNS = document.createElement; // fix the sniff, DOMHelper
-// global.document = document;
-// global.self = document;
-// const location = { href: 'omg' };
-// document.location = location;
-// global.location = location;
-// document.implementation = { createHTMLDocument() { return { body: { childNodes: [1,2]}}}}
-// SimpleDOM.Node.prototype.insertAdjacentHTML = function( ) {}; // fix the sniff, DOMHelper
 
 
 const _requireCache = {};
-// global.window = {};
 global.module = {
   require(x) {
     if (x === 'url') {
