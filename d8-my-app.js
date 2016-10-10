@@ -17,12 +17,11 @@ global.setTimeout = function(callback) {
   Promise.resolve().then(callback).catch(e => print('error' + e));
 };
 
-global.self = global;
 loadFile('./node_modules/simple-dom/dist/simple-dom.js');
-const document = new SimpleDOMTests.Document();
-document.createElementNS = document.createElement; // TODO:wat
+const document = new SimpleDOM.Document();
+document.createElementNS = document.createElement; // fix the sniff, DOMHelper
 global.document = document;
-SimpleDOMTests.Node.prototype.insertAdjacentHTML = function( ) {};
+SimpleDOM.Node.prototype.insertAdjacentHTML = function( ) {}; // fix the sniff, DOMHelper
 
 global.module = {
   require(x) {
@@ -38,7 +37,7 @@ global.module = {
 };
 
 loadFile('./dist/ember.prod.js');
-loadFile('./dist/ember-template-compiler.js');
+// loadFile('./dist/ember-template-compiler.js');
 loadFile('./node_modules/loader.js/lib/loader/loader.js');
 
 define('ember', [], () => Ember)
@@ -54,7 +53,7 @@ const app = App.create({
 
 Ember.run(app, 'boot');
 
-const serializer = new SimpleDOMTests.HTMLSerializer(SimpleDOMTests.voidMap);
+const serializer = new SimpleDOM.HTMLSerializer(SimpleDOM.voidMap);
 
 Ember.RSVP.on('error', error => {
   print(error.message);
@@ -72,11 +71,11 @@ Ember.run(() => {
 		print('visited' + (Date.now() - start));
     print(serializer.serialize(document));
 
-    // return app.visit('/a').finally(() => {
-    //   print(serializer.serialize(document));
-    //   return app.visit('/b').then(function() {
-    //     print(serializer.serialize(document));
-    //   });
-    // });
+    return app.visit('/a').finally(() => {
+      print(serializer.serialize(document));
+      return app.visit('/b').then(function() {
+        print(serializer.serialize(document));
+      });
+    });
   });
 });

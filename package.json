@@ -10,6 +10,6 @@
   "license": "ISC",
   "dependencies": {
     "loader.js": "^4.0.11",
-    "simple-dom": "^0.3.0"
+    "simple-dom": "^0.3.1"
   }
 }

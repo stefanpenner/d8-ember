@@ -19,10 +19,10 @@ global.setTimeout = function(callback) {
 
 global.self = global;
 loadFile('./node_modules/simple-dom/dist/simple-dom.js');
-const document = new SimpleDOMTests.Document();
+const document = new SimpleDOM.Document();
 document.createElementNS = document.createElement; // TODO:wat
 global.document = document;
-SimpleDOMTests.Node.prototype.insertAdjacentHTML = function( ) {};
+SimpleDOM.Node.prototype.insertAdjacentHTML = function( ) {};
 
 loadFile('./dist/ember.prod.js');
 loadFile('./dist/ember-template-compiler.js');
@@ -67,7 +67,7 @@ app.register('component:x-foo', Ember.Component.extend({
 
 Ember.run(app, 'boot');
 
-const serializer = new SimpleDOMTests.HTMLSerializer(SimpleDOMTests.voidMap);
+const serializer = new SimpleDOM.HTMLSerializer(SimpleDOM.voidMap);
 
 Ember.RSVP.on('error', error => {
   print(error.message);
