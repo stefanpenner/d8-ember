@@ -66,27 +66,32 @@ Ember.RSVP.on('error', error => {
   console.log(error.message);
   console.log(''+error.stack);
 });
+
 try {
   Ember.run(() => {
     const start = Date.now();
-    print('visiting');
+    print('visiting...');
     app.visit('/', {
-      isBrowser: false,
-      document,
       rootElement: document.body
-    }).finally(() => {
-      print('visited' + (Date.now() - start));
-      print(serializer.serialize(document));
-
-      return app.visit('/a').finally(() => {
-        print(serializer.serialize(document));
-        return app.visit('/b').then(function() {
-          print(serializer.serialize(document));
-        });
+    }).
+      then(() => {
+        console.log('visited! took',  (Date.now() - start));
+        console.log('\n----- Start: OUTPUT for visit("/")----\n')
+        console.log(serializer.serialize(document));
+        console.log('\n----- End: OUTPUT for visit("/")----\n')
+        // return app.visit('/a').
+        //   then(value => {
+        //     console.log('hello')
+        //     console.log(value)
+        //   }).catch(error => {
+        //     console.log('OMG catch')
+        //     console.log(error);
+        //   });
+      }).finally(function() {
+          console.log('the end');
       });
-    });
   });
 } catch(e) {
-  print('EWUT');
-  print(e);
+  console.log('EWUT');
+  console.log('SUCH CAUGHT', e);
 }
