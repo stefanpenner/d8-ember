@@ -61,10 +61,10 @@ const app = App.create({
 const serializer = new SimpleDOM.HTMLSerializer(SimpleDOM.voidMap);
 
 Ember.RSVP.on('error', error => {
-  print("OMG")
-  print(error);
-  print(error.message);
-  print(''+error.stack);
+  console.log("RSVP.on('error')");
+  console.log(error);
+  console.log(error.message);
+  console.log(''+error.stack);
 });
 try {
   Ember.run(() => {
