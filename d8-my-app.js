@@ -20,18 +20,21 @@ global.setTimeout = function(callback) {
 loadFile('./node_modules/simple-dom/dist/simple-dom.js');
 
 // Fake the world
-const document = new SimpleDOM.Document();
-document.createElementNS = document.createElement; // fix the sniff, DOMHelper
-global.document = document;
-global.self = document;
-const location = { href: 'omg' };
-document.location = location;
-global.location = location;
-document.implementation = { createHTMLDocument() { return { body: { childNodes: [1,2]}}}}
-SimpleDOM.Node.prototype.insertAdjacentHTML = function( ) {}; // fix the sniff, DOMHelper
+const doc = new SimpleDOM.Document();
+const self = {};
+const window = {};
+// document.createElementNS = document.createElement; // fix the sniff, DOMHelper
+// global.document = document;
+// global.self = document;
+// const location = { href: 'omg' };
+// document.location = location;
+// global.location = location;
+// document.implementation = { createHTMLDocument() { return { body: { childNodes: [1,2]}}}}
+// SimpleDOM.Node.prototype.insertAdjacentHTML = function( ) {}; // fix the sniff, DOMHelper
 
 
 const _requireCache = {};
+// global.window = {};
 global.module = {
   require(x) {
     if (x === 'url') {
@@ -72,12 +75,14 @@ try {
     const start = Date.now();
     print('visiting...');
     app.visit('/', {
-      rootElement: document.body
+      rootElement: doc.body,
+      isBrowser: false,
+      document: doc
     }).
       then(() => {
         console.log('visited! took',  (Date.now() - start));
         console.log('\n----- Start: OUTPUT for visit("/")----\n')
-        console.log(serializer.serialize(document));
+        console.log(serializer.serialize(doc));
         console.log('\n----- End: OUTPUT for visit("/")----\n')
         // return app.visit('/a').
         //   then(value => {
