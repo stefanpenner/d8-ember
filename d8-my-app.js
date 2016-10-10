@@ -25,6 +25,18 @@ global.document = document;
 SimpleDOMTests.Node.prototype.insertAdjacentHTML = function( ) {};
 SimpleDOMTests.Node.prototype.appendChild = function(x) { return x;};
 SimpleDOMTests.Node.prototype.cloneNode = function(x) { return x;};
+global.module = {
+  require(x) {
+    if (x === 'url') {
+      const exports = {};
+      loadFile('./vendor/url.js');
+      return exports.Url;
+    } else {
+        throw TypeError('Unknown node module depedencies: ' + x)
+    }
+    console.log(x, y)
+  }
+};
 
 loadFile('./dist/ember.prod.js');
 loadFile('./dist/ember-template-compiler.js');
