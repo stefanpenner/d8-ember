@@ -85,4 +85,5 @@ Ember.run(() => {
 		print('visited' + (Date.now() - start));
     print(serializer.serialize(document));
   });
+
 });

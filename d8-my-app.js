@@ -58,8 +58,6 @@ const app = App.create({
   autoboot: false
 });
 
-Ember.run(app, 'boot');
-
 const serializer = new SimpleDOM.HTMLSerializer(SimpleDOM.voidMap);
 
 Ember.RSVP.on('error', error => {
