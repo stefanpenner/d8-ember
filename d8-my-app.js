@@ -18,17 +18,29 @@ global.setTimeout = function(callback) {
 };
 
 loadFile('./node_modules/simple-dom/dist/simple-dom.js');
+
+// Fake the world
 const document = new SimpleDOM.Document();
 document.createElementNS = document.createElement; // fix the sniff, DOMHelper
 global.document = document;
+global.self = document;
+const location = { href: 'omg' };
+document.location = location;
+global.location = location;
+document.implementation = { createHTMLDocument() { return { body: { childNodes: [1,2]}}}}
 SimpleDOM.Node.prototype.insertAdjacentHTML = function( ) {}; // fix the sniff, DOMHelper
 
+
+const _requireCache = {};
 global.module = {
   require(x) {
     if (x === 'url') {
-      const exports = {};
+      if (x in _requireCache) {
+        return _requireCache[x];
+      }
+      global.exports = {};
       loadFile('./vendor/url.js');
-      return exports.Url;
+      return (_requireCache[x] = exports.Url);
     } else {
         throw TypeError('Unknown node module depedencies: ' + x)
     }
@@ -36,14 +48,9 @@ global.module = {
   }
 };
 
-loadFile('./dist/ember.prod.js');
-// loadFile('./dist/ember-template-compiler.js');
-loadFile('./node_modules/loader.js/lib/loader/loader.js');
-
-define('ember', [], () => Ember)
-loadFile('./vendor/ember-load-initializers.js'); // TODO: use fastboot vendor
-loadFile('./vendor/ember-resolver.js'); // TODO: use fastboot vendor
 runningTests = true;
+
+loadFile('./my-app/dist/assets/vendor.js');
 loadFile('./my-app/dist/assets/my-app.js');
 
 const App = require('my-app/app').default;
@@ -56,26 +63,32 @@ Ember.run(app, 'boot');
 const serializer = new SimpleDOM.HTMLSerializer(SimpleDOM.voidMap);
 
 Ember.RSVP.on('error', error => {
+  print("OMG")
+  print(error);
   print(error.message);
-  print(error.stack);
+  print(''+error.stack);
 });
-
-Ember.run(() => {
-	const start = Date.now();
-	print('visiting');
-  app.visit('/', {
-    isBrowser: false,
-    document,
-    rootElement: document.body
-  }).finally(() => {
-		print('visited' + (Date.now() - start));
-    print(serializer.serialize(document));
-
-    return app.visit('/a').finally(() => {
+try {
+  Ember.run(() => {
+    const start = Date.now();
+    print('visiting');
+    app.visit('/', {
+      isBrowser: false,
+      document,
+      rootElement: document.body
+    }).finally(() => {
+      print('visited' + (Date.now() - start));
       print(serializer.serialize(document));
-      return app.visit('/b').then(function() {
+
+      return app.visit('/a').finally(() => {
         print(serializer.serialize(document));
+        return app.visit('/b').then(function() {
+          print(serializer.serialize(document));
+        });
       });
     });
   });
-});
+} catch(e) {
+  print('EWUT');
+  print(e);
+}
